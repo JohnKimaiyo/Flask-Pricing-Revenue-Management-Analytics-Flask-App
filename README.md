@@ -1,148 +1,196 @@
-Airline Revenue Management Analytics Platform
+✈️ Airline Revenue Management Analytics & Machine Learning Platform
 
-A Revenue Management (RM) Analytics & Governance Platform built with Flask, PostgreSQL, and Python, designed to simulate airline pricing, demand, and revenue optimization. This project showcases advanced query capabilities, login authentication, and explainable analytics, going beyond traditional RM systems like Altéa, Sabre Mosaic, and PROS.
+A serverless, ML-powered airline Revenue Management (RM) platform that combines booking analytics, advanced querying, and predictive machine learning models.
+Built with Flask, Scikit-Learn, and AWS Lambda, this project simulates how modern airlines support pricing, demand forecasting, and revenue optimization decisions.
 
-🔹 Features
+📌 Key Features
+🔐 Authentication
 
-Login Authentication: Secure user login system using Flask-Login.
+Secure login using Flask-Login
 
-Dashboard: Overview of revenue metrics and performance indicators.
+Role-ready architecture (analyst, admin, RM manager)
 
-Advanced Query Engine: Analyst-driven queries including:
+📊 Revenue Management Analytics
 
-Explainable price changes (why prices moved)
+Revenue by route, POS, fare class
 
-Revenue risk analysis (simulate downside revenue scenarios)
+Passenger and yield trends
 
-WTP (Willingness-to-Pay) and buy-down risk evaluation
+Seasonality and pricing impact analysis
 
-CSV Integration: Load historical flight booking data for analysis.
+Advanced query logic inspired by real RM systems (Altéa, PROS, Sabre)
 
-PostgreSQL Backend: Stores flight and booking data for scalable analytics.
+🧠 Machine Learning (Core Differentiator)
 
-Progressive Queries: Analyst can run strategy sandbox queries and validate RM outputs.
+Demand Forecasting Model
 
-🔹 Technologies Used
+Predicts expected passengers for future flights
 
-Backend: Python, Flask, SQLAlchemy
+Willingness-to-Pay (WTP) Model
 
-Database: PostgreSQL
+Classifies customers as price-sensitive vs high-value
 
-Data Analysis: Pandas, NumPy
+Buy-Down / Waiting Risk Model
 
-Authentication: Flask-Login
+Predicts likelihood of customers delaying purchase for lower fares
 
-Frontend: HTML, Bootstrap (optional for styling)
+All models trained using historical booking data
 
-🔹 Project Structure
-airline-rm-analytics/
+☁️ Serverless Cloud Hosting
+
+Hosted for free using:
+
+AWS Lambda
+
+API Gateway
+
+Deployed using Zappa
+
+HTTPS endpoint generated automatically
+
+🏗️ Technology Stack
+Layer	Technology
+Backend	Flask (Python)
+Authentication	Flask-Login
+Database	SQLite (Lambda-compatible)
+Analytics	Pandas, SQLAlchemy
+Machine Learning	Scikit-Learn
+Model Persistence	Joblib
+Cloud	AWS Lambda + API Gateway
+Deployment	Zappa
+📁 Project Structure
+airline-rm-ml-platform/
 │
-├── app.py                  # Main Flask application
-├── config.py               # Configuration (DB connection, secret key)
-├── load_csv.py             # Script to load bookings CSV into DB
+├── application.py          # Flask app entry point
+├── config.py               # App configuration
+├── load_csv.py             # Load booking CSV into DB
+├── train_models.py         # Train ML models
 │
-├── models/                 # Database models
-│   ├── __init__.py
-│   ├── user.py
-│   └── booking.py
+├── models/
+│   ├── user.py             # User authentication model
+│   ├── booking.py          # Booking data model
+│   └── ml_models.py        # ML model helpers
 │
-├── routes/                 # Application routes
-│   ├── __init__.py
-│   ├── auth_routes.py
-│   ├── dashboard_routes.py
-│   └── query_routes.py
+├── routes/
+│   ├── auth_routes.py      # Login / logout
+│   ├── dashboard_routes.py # Main dashboard
+│   └── analytics_routes.py # RM analytics & ML queries
 │
-├── templates/              # HTML templates
+├── ml/
+│   ├── demand_model.pkl
+│   ├── wtp_model.pkl
+│   └── risk_model.pkl
+│
+├── templates/
 │   ├── login.html
 │   ├── dashboard.html
-│   └── query.html
+│   └── analytics.html
 │
-└── static/                 # CSS/JS files (optional)
+└── static/
 
-🔹 Setup Instructions
+🚀 Setup Instructions (Local)
+1️⃣ Clone Repository
+git clone <your-repo-url>
+cd airline-rm-ml-platform
 
-Clone the repository
-
-git clone <repo-url>
-cd airline-rm-analytics
-
-
-Create and activate a virtual environment
-
+2️⃣ Create Virtual Environment
 python -m venv venv
 venv\Scripts\activate
 
+3️⃣ Install Dependencies
+pip install flask flask-login flask-sqlalchemy pandas numpy scikit-learn joblib zappa awscli
 
-Install dependencies
+📥 Load Booking Data
 
-pip install -r requirements.txt
-
-
-Set up PostgreSQL database
-
-Create a database named airline_rm
-
-Update config.py with your PostgreSQL credentials
-
-Load booking data from CSV
+You already have the booking CSV file.
 
 python load_csv.py
 
 
-Run the Flask app
+This will:
 
-python app.py
+Create bookings.db
+
+Load all booking records
+
+🧠 Train Machine Learning Models
+python train_models.py
 
 
-Access in browser
+Outputs:
+
+ml/
+├── demand_model.pkl
+├── wtp_model.pkl
+└── risk_model.pkl
+
+▶️ Run Application Locally
+python application.py
+
+
+Access:
 
 http://127.0.0.1:5000
 
-🔹 Usage
+☁️ Deploy to AWS Lambda (Free Tier)
+1️⃣ Configure AWS CLI
+aws configure
 
-Login Page: Enter credentials to access the dashboard.
+2️⃣ Initialize Zappa
+zappa init
 
-Dashboard: View revenue summaries and key metrics.
 
-Query UI: Select query type and run advanced RM analyses:
+Use:
 
-Price explanations
+App function: application.app
 
-Revenue risk simulations
+Runtime: python3.10
 
-Buy-down and WTP segmentation
+Region: us-east-1
 
-CSV Updates: Load new booking data anytime for real-time analytics.
+3️⃣ Deploy
+zappa deploy dev
 
-🔹 Screenshots
 
-(Optional: add screenshots of login, dashboard, and query results here)
+Zappa returns a public HTTPS URL 🎉
 
-🔹 Why This Project Stands Out
+4️⃣ Update Deployment
+zappa update dev
 
-Explainable Analytics: Provides human-readable reasoning for pricing decisions.
+🧪 Machine Learning Overview
+Model	Algorithm	Purpose
+Demand Forecast	Linear Regression	Predict passengers
+WTP Model	Logistic Regression	High vs low value customers
+Buy-Down Risk	Random Forest	Fare waiting behavior
 
-Risk-Aware Queries: Simulate revenue scenarios and downside risk.
+All models are trained on:
 
-Analyst Control: Sandbox queries allow strategy testing beyond typical RM systems.
+Route
 
-Interview-Ready: Demonstrates technical skills in Python, Flask, SQL, and data analytics, aligned with Solutions & Analytics Analyst responsibilities.
+Seasonality
 
-🔹 Future Enhancements
+Day of week
 
-Natural language query input for analysts
+Fare price
 
-Interactive visualizations using Plotly or Dash
+Passenger history
 
-Machine learning–based WTP prediction
+🧠 What Makes This Project Unique
 
-Docker deployment for cloud-ready setup
+✅ Combines analytics + ML (not just dashboards)
+✅ Includes pricing risk & WTP modeling (rare in demos)
+✅ Serverless & production-style deployment
+✅ Inspired by real airline RM systems (PROS, Altéa, Sabre)
+✅ Interview-ready and portfolio-grade
 
-Role-based permissions for multi-level analyst access
+📌 Future Enhancements
 
-🔹 Author
+SHAP model explainability
 
-John Kipkemboi Kimaiyo
-Email: kimaiyojohn6@gmail.com
+PostgreSQL (RDS)
 
-Portfolio: https://johnkimaiyo-rosy.vercel.app/
+Real-time pricing simulation
+
+Role-based access control
+
+CI/CD pipeline
